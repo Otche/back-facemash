@@ -10,7 +10,11 @@ export class FacemashService {
     private usersRepository: Repository<Cat>,
   ) {}
 
-  async getCats(): Promise<Cat[]> {
-    return this.usersRepository.find();
+  async getCats(start: number, limit: number): Promise<Cat[]> {
+    return this.usersRepository.find({ skip: start, take: limit });
+  }
+
+  async countCats(): Promise<number> {
+    return this.usersRepository.count();
   }
 }
