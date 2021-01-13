@@ -1,7 +1,11 @@
-import { IsNotEmpty, IsArray, IsNumber } from 'class-validator';
-import { Cat } from 'src/entities/Cat.entity';
+import { IsNotEmpty, IsArray, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+
+class CatDto {
+  @ApiProperty() @IsNotEmpty() @IsString() id: string;
+  @ApiProperty() @IsNotEmpty() @IsString() url: string;
+}
 export class CatsApiDto {
-  @ApiProperty() @IsArray() results: Cat[];
+  @ApiProperty({ isArray: true, type: CatDto }) @IsArray() results: CatDto[];
   @ApiProperty() @IsNotEmpty() @IsNumber() count: number;
 }

@@ -1,8 +1,9 @@
 import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
 import { FacemashService } from './facemash.service';
-import { Cat } from './entities/Cat.entity';
 import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
 import { CatsApiDto } from './dto/cats.dto';
+import { ApiCreatedResponse, ApiQuery } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 
 @Injectable()
 export class PaginationPipe implements PipeTransform {
@@ -21,10 +22,15 @@ export class PaginationPipe implements PipeTransform {
 @Controller()
 export class FacemashController {
   constructor(private readonly appService: FacemashService) {}
+
+  @ApiCreatedResponse({
+    description: 'get all cats ressources with pagination options',
+    type: CatsApiDto,
+  })
   @Get('/api/cats')
   async getCats(
-    @Query('limit', PaginationPipe, ParseIntPipe) limit: number,
-    @Query('start', PaginationPipe, ParseIntPipe) start: number,
+    @Query('limit', PaginationPipe, ParseIntPipe) limit?: number,
+    @Query('start', PaginationPipe, ParseIntPipe) start?: number,
   ): Promise<CatsApiDto> {
     return {
       results: await this.appService.getCats(start, limit),
